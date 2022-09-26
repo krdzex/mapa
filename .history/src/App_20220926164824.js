@@ -41,24 +41,30 @@ function App() {
       ]})
   },[])
 
- function Markerwhatever() {
-  const geoJson = useRef(null);
-  const map = useMap();
-  
-  const zoomToFeature = (e) => {
-    map.fitBounds(e.target.getBounds());
-  };
+  export default function Markerwhatever(props) {
+    const map = useMap();
 
-  return       <GeoJSON data={nesto} onEachFeature={(__, layer) => {
-    layer.on({
-      click: (e) => {
-        zoomToFeature(e);
-      }
-    });
-  }}/>;
-  }
+const geoJson = useRef(null);
+const map = useMap();
 
+const highlightFeature = (e) => {
+  const layer = e.target;
 
+  layer.setStyle({
+    color: "#666",
+    dashArray: "",
+    fillOpacity: 0.7,
+    weight: 5
+  });
+};
+
+const resetHighlight = (e) => {
+  geoJson.current?.resetStyle(e.target);
+};
+
+const zoomToFeature = (e) => {
+  map.fitBounds(e.target.getBounds());
+};
 
   return (
     <>
@@ -67,7 +73,19 @@ function App() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Markerwhatever />
+      <GeoJSON data={nesto} onEachFeature={(__, layer) => {
+          layer.on({
+            click: (e) => {
+              zoomToFeature(e);
+            },
+            mouseout: (e) => {
+              resetHighlight(e);
+            },
+            mouseover: (e) => {
+              highlightFeature(e);
+            }
+          });
+        }}/>
     </MapContainer>
   </>
 

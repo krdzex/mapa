@@ -45,6 +45,21 @@ function App() {
   const geoJson = useRef(null);
   const map = useMap();
   
+  const highlightFeature = (e) => {
+    const layer = e.target;
+  
+    layer.setStyle({
+      color: "#666",
+      dashArray: "",
+      fillOpacity: 0.7,
+      weight: 5
+    });
+  };
+  
+  const resetHighlight = (e) => {
+    geoJson.current?.resetStyle(e.target);
+  };
+  
   const zoomToFeature = (e) => {
     map.fitBounds(e.target.getBounds());
   };
@@ -53,6 +68,12 @@ function App() {
     layer.on({
       click: (e) => {
         zoomToFeature(e);
+      },
+      mouseout: (e) => {
+        resetHighlight(e);
+      },
+      mouseover: (e) => {
+        highlightFeature(e);
       }
     });
   }}/>;
@@ -67,7 +88,7 @@ function App() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Markerwhatever />
+      <Markerwhatever
     </MapContainer>
   </>
 

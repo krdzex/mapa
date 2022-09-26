@@ -45,6 +45,19 @@ function App() {
   const geoJson = useRef(null);
   const map = useMap();
   
+  const highlightFeature = (e) => {
+    const layer = e.target;
+  
+    layer.setStyle({
+      color: "#666",
+      dashArray: "",
+      fillOpacity: 0.7,
+      weight: 5
+    });
+  };
+  
+ 
+  
   const zoomToFeature = (e) => {
     map.fitBounds(e.target.getBounds());
   };

@@ -42,20 +42,7 @@ function App() {
   },[])
 
  function Markerwhatever() {
-  const geoJson = useRef(null);
-  const map = useMap();
-  
-  const zoomToFeature = (e) => {
-    map.fitBounds(e.target.getBounds());
-  };
-
-  return       <GeoJSON data={nesto} onEachFeature={(__, layer) => {
-    layer.on({
-      click: (e) => {
-        zoomToFeature(e);
-      }
-    });
-  }}/>;
+    const map = useMap();
   }
 
 
@@ -67,7 +54,19 @@ function App() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Markerwhatever />
+      <GeoJSON data={nesto} onEachFeature={(__, layer) => {
+          layer.on({
+            click: (e) => {
+              zoomToFeature(e);
+            },
+            mouseout: (e) => {
+              resetHighlight(e);
+            },
+            mouseover: (e) => {
+              highlightFeature(e);
+            }
+          });
+        }}/>
     </MapContainer>
   </>
 
